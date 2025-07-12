@@ -19,3 +19,6 @@ end
 # Basics
 require_relative 'sdl3/basics/main'
 require_relative 'sdl3/basics/init'
+
+# Video
+require_relative 'sdl3/video/video'
