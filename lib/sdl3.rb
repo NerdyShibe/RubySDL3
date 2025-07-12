@@ -8,7 +8,7 @@ require 'ffi'
 module SDL3
   extend FFI::Library
 
-  # Load the library once here.
+  # Load the library once here
   ffi_lib [
     'libSDL3.so',       # Linux
     'SDL3.dll',         # Windows
@@ -16,9 +16,7 @@ module SDL3
   ]
 end
 
-# Basics
-require_relative 'sdl3/basics/main'
+require_relative 'sdl3/basics/hints'
 require_relative 'sdl3/basics/init'
 
-# Video
 require_relative 'sdl3/video/video'
