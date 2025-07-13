@@ -6,10 +6,11 @@ ruby '3.4.4'
 
 gem 'ffi'
 
-group :development, :test do
+group :development do
   gem 'debug'
+end
+
+group :test do
   gem 'rspec'
-  gem 'rubocop'
-  gem 'rubocop-rspec'
   gem 'simplecov'
 end

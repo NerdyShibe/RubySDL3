@@ -1,0 +1,15 @@
+plugins: rubocop-rspec
+
+AllCops:
+  NewCops: enable
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/AbcSize:
+  Exclude:
+    - 'spec/**/*_spec.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'spec/**/*_spec.rb'
