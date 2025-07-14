@@ -8,7 +8,7 @@ module CHeaderParser
   # @param header_file [String] The full path to the header file.
   # @return [Hash] A hash where keys are C constant names (e.g., "SDL_INIT_VIDEO")
   #   and values are their corresponding Ruby values (Integer, String, etc.).
-  def self.parse_all_defines(header_file)
+  def self.parse_macros(header_file)
     content = File.read("#{SDL3_INCLUDE_PATH}#{header_file}")
 
     content.gsub!(%r{/\*.*?\*/}m, '')
@@ -18,20 +18,25 @@ module CHeaderParser
     # This regex finds lines starting with #define and captures the name and value.
     # It handles simple values (numbers, strings) and other constants.
     # It intentionally ignores function-like macros like #define MY_FUNC(x).
-    define_regex = /^\s*#define\s+([A-Z0-9_]+)\s+([^\(\n\r]+)/
+    # define_regex = /^\s*#define\s+([A-Z0-9_]+)\s+([^\(\n\r]+)/
+    define_regex = /^\s*#define\s+([A-Z0-9_]+)\s+(.+)/
 
     content.scan(define_regex) do |match|
       name, value_str = match
       value_str.strip!
 
+      if (match_data = value_str.match(/\((.*)\)/))
+        value_str = match_data[1]
+      end
+
       # Convert the C value string into an appropriate Ruby type.
       value = case value_str
               when /^0x[0-9a-fA-F]+/
-                value_str.to_i(16) # Hexadecimal integer
+                value_str.to_i(16)
               when /^-?\d+$/
                 value_str.to_i # Decimal integer
               when /^"(.*)"$/
-                ::Regexp.last_match(1) # String literal
+                ::Regexp.last_match(1)
               else
                 # It might be another constant, keep it as a string for now.
                 value_str
@@ -48,7 +53,7 @@ module CHeaderParser
   # @param header_path [String] The full path to the header file.
   # @return [Hash] A hash where keys are C enum names (e.g., "SDL_AppResult")
   #   and values are hashes of their members (e.g., { continue: 0, success: 1 }).
-  def self.parse_all_enums(header_file)
+  def self.parse_enums(header_file)
     content = File.read("#{SDL3_INCLUDE_PATH}#{header_file}")
 
     content.gsub!(%r{/\*.*?\*/}m, '')
