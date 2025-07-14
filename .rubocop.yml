@@ -8,8 +8,12 @@ Style/Documentation:
 
 Metrics/AbcSize:
   Exclude:
-    - 'spec/**/*_spec.rb'
+    - 'spec/**/*.rb'
 
 Metrics/MethodLength:
   Exclude:
-    - 'spec/**/*_spec.rb'
+    - 'spec/**/*.rb'
+
+RSpec/DescribeClass:
+  Exclude:
+    - 'spec/**/*.rb'
